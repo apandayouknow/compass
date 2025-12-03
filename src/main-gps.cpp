@@ -20,6 +20,18 @@ void loop() {
         char *p = nmea;
         // Skip $GNGGA,
         p = strchr(p, ',') + 1; // time
+        char timeStr[11] = {0};
+        strncpy(timeStr, p, 10); // Copy up to next comma or 10 chars
+        // Parse time
+        int hour = (timeStr[0] - '0') * 10 + (timeStr[1] - '0');
+        int min  = (timeStr[2] - '0') * 10 + (timeStr[3] - '0');
+        int sec  = (timeStr[4] - '0') * 10 + (timeStr[5] - '0');
+        Serial.print("UTC Time: ");
+        Serial.print(hour);
+        Serial.print(":");
+        Serial.print(min);
+        Serial.print(":");
+        Serial.println(sec);
         p = strchr(p, ',') + 1; // latitude
         float lat = atof(p);
         p = strchr(p, ',') + 1; // N/S

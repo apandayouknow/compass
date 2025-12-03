@@ -55,17 +55,7 @@
 #include <TFT_eSPI.h>       // Hardware-specific library
 
 TFT_eSPI tft = TFT_eSPI();  // Invoke custom library
-
-#define MAXTX 3
-#define MAXRX 2
-
-
-#include <SparkFun_u-blox_GNSS_v3.h> // Include the SparkFun u-blox GNSS library
-
-SFE_UBLOX_GNSS_SERIAL myGNSS; // Create a u-blox GNSS object for serial communication
-
-SoftwareSerial MaxSerial(MAXTX, MAXRX); // RX, TX
-#define gpsSerial MaxSerial // Define the hardware serial port connected to the GPS module
+SoftwareSerial gpsSerial(3, 2); // RX, TX
 
 
 void setup(void) {
@@ -101,20 +91,6 @@ void setup(void) {
 
   gpsSerial.begin(9600); // Initialize the hardware serial port for the GPS module
 
-  // Attempt to connect to the u-blox module
-  while (myGNSS.begin(gpsSerial) == false) {
-    Serial.println(F("u-blox GNSS not detected"));
-    Serial.println(F("Attempting to enable the UBX protocol for output"));
-    myGNSS.setUART1Output(COM_TYPE_UBX); // Enable UBX output on UART1
-    Serial.println(F("Retrying..."));
-    delay(1000);
-  }
-  Serial.println(F("u-blox GNSS detected!"));
-
-  // Optional: Configure the module, e.g., set dynamic model for better performance
-  myGNSS.setDynamicModel(DYN_MODEL_PORTABLE); // Set dynamic model to portable
-  myGNSS.saveConfiguration(); // Save the configuration to flash
-
   delay(5000);
 
 }
@@ -122,72 +98,74 @@ void setup(void) {
 
 void loop() {
   // Serial.println("Testing MAX-M10S");
-  if (myGNSS.getPVT() == true) {
-    int32_t latitude = myGNSS.getLatitude();
-    Serial.print(F("Lat: "));
-    Serial.print(latitude); // Latitude in degrees * 10^-7
+  // if (myGNSS.getPVT() == true) {
+  //   int32_t latitude = myGNSS.getLatitude();
+  //   Serial.print(F("Lat: "));
+  //   Serial.print(latitude); // Latitude in degrees * 10^-7
 
-    int32_t longitude = myGNSS.getLongitude();
-    Serial.print(F(" Long: "));
-    Serial.print(longitude); // Longitude in degrees * 10^-7
-    Serial.print(F(" (degrees * 10^-7)"));
+  //   int32_t longitude = myGNSS.getLongitude();
+  //   Serial.print(F(" Long: "));
+  //   Serial.print(longitude); // Longitude in degrees * 10^-7
+  //   Serial.print(F(" (degrees * 10^-7)"));
 
-    int32_t altitude = myGNSS.getAltitudeMSL(); // Altitude above Mean Sea Level in mm
-    Serial.print(F(" Alt: "));
-    Serial.print(altitude);
-    Serial.print(F(" (mm)"));
-    Serial.println();
+  //   int32_t altitude = myGNSS.getAltitudeMSL(); // Altitude above Mean Sea Level in mm
+  //   Serial.print(F(" Alt: "));
+  //   Serial.print(altitude);
+  //   Serial.print(F(" (mm)"));
+  //   Serial.println();
+  // }
+
+  while (gpsSerial.available()) {
+    Serial.write(gpsSerial.read());
   }
 
+  Serial.println("Inverting display");
 
-
-  // Serial.println("Inverting display");
-
-  // tft.invertDisplay( false ); // Where i is true or false
+  tft.invertDisplay( false ); // Where i is true or false
  
-  // tft.fillScreen(TFT_BLACK);
-  // tft.drawRect(0, 0, tft.width(), tft.height(), TFT_GREEN);
+  tft.fillScreen(TFT_BLACK);
+  tft.drawRect(0, 0, tft.width(), tft.height(), TFT_GREEN);
 
-  // tft.setCursor(0, 4, 4);
+  tft.setCursor(0, 4, 4);
 
-  // tft.setTextColor(TFT_WHITE);
-  // tft.println(" Invert OFF\n");
+  tft.setTextColor(TFT_WHITE);
+  tft.println(" Invert OFF\n");
 
-  // tft.println(" White text");
+  tft.println(" White text");
   
-  // tft.setTextColor(TFT_RED);
-  // tft.println(" Red text");
+  tft.setTextColor(TFT_RED);
+  tft.println(" Red text");
   
-  // tft.setTextColor(TFT_GREEN);
-  // tft.println(" Green text");
+  tft.setTextColor(TFT_GREEN);
+  tft.println(" Green text");
   
-  // tft.setTextColor(TFT_BLUE);
-  // tft.println(" Blue text");
+  tft.setTextColor(TFT_BLUE);
+  tft.println(" Blue text");
 
-  // delay(5000);
+  delay(5000);
 
 
-  // // Binary inversion of colours
-  // tft.invertDisplay( true ); // Where i is true or false
+  // Binary inversion of colours
+  tft.invertDisplay( true ); // Where i is true or false
  
-  // tft.fillScreen(TFT_BLACK);
-  // tft.drawRect(0, 0, tft.width(), tft.height(), TFT_GREEN);
+  tft.fillScreen(TFT_BLACK);
+  tft.drawRect(0, 0, tft.width(), tft.height(), TFT_GREEN);
 
-  // tft.setCursor(0, 4, 4);
+  tft.setCursor(0, 4, 4);
 
-  // tft.setTextColor(TFT_WHITE);
-  // tft.println(" Invert ON\n");
+  tft.setTextColor(TFT_WHITE);
+  tft.println(" Invert ON\n");
 
-  // tft.println(" White text");
+  tft.println(" White text");
   
-  // tft.setTextColor(TFT_RED);
-  // tft.println(" Red text");
+  tft.setTextColor(TFT_RED);
+  tft.println(" Red text");
   
-  // tft.setTextColor(TFT_GREEN);
-  // tft.println(" Green text");
+  tft.setTextColor(TFT_GREEN);
+  tft.println(" Green text");
   
-  // tft.setTextColor(TFT_BLUE);
-  // tft.println(" Blue text");
+  tft.setTextColor(TFT_BLUE);
+  tft.println(" Blue text");
 
-  // delay(5000);
+  delay(5000);
 }
