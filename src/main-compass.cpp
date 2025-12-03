@@ -35,9 +35,9 @@ Adafruit_LIS2MDL lis2mdl;
 TFT_eSPI tft = TFT_eSPI();
 SoftwareSerial gpsSerial(3,2);
 
-//Auto coordinates
-double target_lat = 1.3519688;
-double target_lon = 103.848658;
+//Target coordinates CHANGE AS NEEDED
+double target_lat = 22.5508205;
+double target_lon = 114.0451814;
 
 //Flash vars
 Preferences prefs;
